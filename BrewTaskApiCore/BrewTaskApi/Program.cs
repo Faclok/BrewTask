@@ -1,5 +1,7 @@
 using Asp.Versioning;
+using BrewTaskApi.JWT;
 using BrewTaskApi.Swagger;
+using BrewTaskApi.V1.Services;
 
 namespace BrewTaskApi
 {
@@ -15,6 +17,9 @@ namespace BrewTaskApi
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddSwaggerOptionsBrewTask();
 
+            // Jwt
+            builder.Services.AddJWTokenBrewTask(builder.Configuration);
+
             // Versioning
             builder.Services.AddApiVersioning(options =>
             {
@@ -26,6 +31,9 @@ namespace BrewTaskApi
                 options.GroupNameFormat = "'v'VVV";
                 options.SubstituteApiVersionInUrl = true;
             });
+
+            // services
+            builder.Services.AddTransient<JwtService>();
 
             var app = builder.Build();
 
@@ -50,10 +58,10 @@ namespace BrewTaskApi
                 });
             }
 
+            app.UseMiddleware<JWTMiddleware>();
+
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
             app.MapControllers();
 
             app.Run();
