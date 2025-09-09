@@ -1,15 +1,17 @@
 using Asp.Versioning;
 using BrewTaskApi.Database.Contexts;
+using BrewTaskApi.Database.Extensions;
 using BrewTaskApi.JWT;
 using BrewTaskApi.Swagger;
 using BrewTaskApi.V1.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace BrewTaskApi
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -64,6 +66,10 @@ namespace BrewTaskApi
                     }
                 });
             }
+            else
+            {
+                await app.MigrateDatabaseAsync<BrewTaskContext>();
+            }
 
             app.UseMiddleware<JWTMiddleware>();
 
@@ -71,7 +77,9 @@ namespace BrewTaskApi
             app.UseAuthorization();
             app.MapControllers();
 
-            app.Run();
+         
+
+            await app.RunAsync();
         }
     }
 }

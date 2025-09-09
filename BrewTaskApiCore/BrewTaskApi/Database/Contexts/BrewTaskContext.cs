@@ -1,7 +1,10 @@
-﻿using BrewTaskApi.Database.Entities.Abstractions;
+﻿using BrewTaskApi.Database.Entities;
+using BrewTaskApi.Database.Entities.Abstractions;
 using BrewTaskApi.Database.Extensions;
+using BrewTaskApi.Database.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using TaskEntity = BrewTaskApi.Database.Entities.Task;
 
 namespace BrewTaskApi.Database.Contexts
 {
@@ -38,6 +41,47 @@ namespace BrewTaskApi.Database.Contexts
                         property.SetValueConverter(dateTimeConverter);
                 }
             }
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.AuthorTasks)
+                .WithOne(t => t.Author)
+                .HasForeignKey(t => t.AuthorId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.AssigneeTasks)
+                .WithOne(t => t.Assignee)
+                .HasForeignKey(t => t.AssigneeId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<Subtasks>()
+                .HasOne(st => st.ParentTask)      
+                .WithMany(t => t.Subtasks)
+                .HasForeignKey(st => st.ParentTaskId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+
+            modelBuilder.Entity<TaskRelation>()
+                .HasOne(tr => tr.TaskFrom)        
+                .WithMany(t => t.RelationTasksFrom) 
+                .HasForeignKey(tr => tr.TaskFromId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<TaskRelation>()
+                .HasOne(tr => tr.TaskTo)         
+                .WithMany(t => t.RelationTasksTo)
+                .HasForeignKey(tr => tr.TaskToId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<User>()
+                .HasData([
+                    new(){
+                        Id = 1,
+                        Username = "vinokurov",
+                        Email = "vino_kurov@inbox.ru",
+                        PasswordHash = SecurePasswordService.Hash("vino_kurov@inbox.ru"),
+                    }
+                    ]);
         }
 
         #endregion

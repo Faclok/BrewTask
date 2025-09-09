@@ -7,7 +7,7 @@ namespace BrewTaskApi.Database.Contexts
     /// <summary>
     /// factory command
     /// </summary>
-    public class UsersContextFactory : IDesignTimeDbContextFactory<BrewTaskContext>
+    public class BrewTaskContextFactory : IDesignTimeDbContextFactory<BrewTaskContext>
     {
 
         /// <summary>
