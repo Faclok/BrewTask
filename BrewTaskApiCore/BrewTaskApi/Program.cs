@@ -1,7 +1,9 @@
 using Asp.Versioning;
+using BrewTaskApi.Database.Contexts;
 using BrewTaskApi.JWT;
 using BrewTaskApi.Swagger;
 using BrewTaskApi.V1.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace BrewTaskApi
 {
@@ -13,6 +15,11 @@ namespace BrewTaskApi
 
             // Add services to the container.
             builder.Services.AddControllers();
+
+            // context
+            builder.Services.AddDbContext<BrewTaskContext>(options => {
+                options.UseNpgsql(builder.Configuration["CONNECTION_DB"]);
+            });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddSwaggerOptionsBrewTask();

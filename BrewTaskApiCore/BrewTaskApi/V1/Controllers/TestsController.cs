@@ -1,7 +1,9 @@
 ﻿using Asp.Versioning;
+using BrewTaskApi.Database.Contexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BrewTaskApi.V1.Controllers
 {
@@ -23,6 +25,15 @@ namespace BrewTaskApi.V1.Controllers
         [ProducesResponseType<DateTime>(StatusCodes.Status200OK)]
         public IActionResult Get()
             => Ok(DateTime.UtcNow);
+
+        /// <summary>
+        /// get context id 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("contextId")]
+        [ProducesResponseType<DbContextId>(StatusCodes.Status200OK)]
+        public IActionResult Get([FromServices] BrewTaskContext context)
+            => Ok(context.ContextId);
 
         /// <summary>
         /// check token
