@@ -66,10 +66,10 @@ namespace BrewTaskApi
                     }
                 });
             }
-            else
-            {
+
+            var installMigration = builder.Configuration["INSTALL_MIGRATION"];
+            if (!string.IsNullOrWhiteSpace(installMigration) && installMigration == "true")
                 await app.MigrateDatabaseAsync<BrewTaskContext>();
-            }
 
             app.UseMiddleware<JWTMiddleware>();
 

@@ -27,7 +27,7 @@ namespace BrewTaskApi.Database.Entities
         /// <summary>
         /// create at
         /// </summary>
-        public DateTime CreateAt { get; private set; } = DateTime.UtcNow;
+        public DateTime CreateAt { get; private set; }
 
         /// <summary>
         /// Author Tasks
@@ -38,5 +38,6 @@ namespace BrewTaskApi.Database.Entities
         /// Assignee Tasks
         /// </summary>
         public ICollection<Task> AssigneeTasks { get; set; } = [];
+
     }
 }

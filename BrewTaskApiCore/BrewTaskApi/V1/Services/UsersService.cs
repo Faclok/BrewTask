@@ -18,22 +18,62 @@ namespace BrewTaskApi.V1.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<UserResponse?> GetAsync(int id)
-            => context.Users
+        public async Task<UserResponse?> GetAsync(int id)
+        {
+            var result = await context.Users
                 .AsNoTracking()
-                .Select(user => new UserResponse(user.Id, user.Username, user.Email, user.CreateAt, user.AuthorTasks.Count(), user.AssigneeTasks.Count()))
-                .FirstOrDefaultAsync(a => a.Id == id);
+                .Where(user => user.Id == id)
+                .Select(user => new
+                {
+                    user.Id,
+                    user.Username,
+                    user.Email,
+                    user.CreateAt,
+                    AuthorTasksCount = user.AuthorTasks.Count(),
+                    AssigneeTasksCount = user.AssigneeTasks.Count()
+                })
+                .FirstOrDefaultAsync();
+
+            return result == null ? null : new UserResponse(
+                result.Id,
+                result.Username,
+                result.Email,
+                result.CreateAt,
+                result.AuthorTasksCount,
+                result.AssigneeTasksCount
+            );
+        }
 
         /// <summary>
         /// get
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<UserResponse> GetRequiredAsync(int id)
-            => context.Users
+        public async Task<UserResponse> GetRequiredAsync(int id)
+        {
+            var result = await context.Users
                 .AsNoTracking()
-                .Select(user => new UserResponse(user.Id, user.Username, user.Email, user.CreateAt, user.AuthorTasks.Count(), user.AssigneeTasks.Count()))
-                .FirstAsync(a => a.Id == id);
+                .Where(user => user.Id == id)
+                .Select(user => new
+                {
+                    user.Id,
+                    user.Username,
+                    user.Email,
+                    user.CreateAt,
+                    AuthorTasksCount = user.AuthorTasks.Count(),
+                    AssigneeTasksCount = user.AssigneeTasks.Count()
+                })
+                .FirstAsync();
+
+            return new UserResponse(
+                result.Id,
+                result.Username,
+                result.Email,
+                result.CreateAt,
+                result.AuthorTasksCount,
+                result.AssigneeTasksCount
+            );
+        }
 
 
         /// <summary>

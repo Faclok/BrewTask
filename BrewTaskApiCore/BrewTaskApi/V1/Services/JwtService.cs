@@ -1,4 +1,5 @@
 ﻿using BrewTaskApi.JWT;
+using BrewTaskApi.V1.Services.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -10,6 +11,7 @@ namespace BrewTaskApi.V1.Services
     /// get jwt
     /// </summary>
     /// <param name="options"></param>
+    [BusinessService]
     public class JwtService(AuthenticationOptions options)
     {
 

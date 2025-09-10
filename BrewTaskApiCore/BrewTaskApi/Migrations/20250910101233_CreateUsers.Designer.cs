@@ -3,6 +3,7 @@ using System;
 using BrewTaskApi.Database.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BrewTaskApi.Migrations
 {
     [DbContext(typeof(BrewTaskContext))]
-    partial class BrewTaskContextModelSnapshot : ModelSnapshot
+    [Migration("20250910101233_CreateUsers")]
+    partial class CreateUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -168,7 +171,7 @@ namespace BrewTaskApi.Migrations
                         new
                         {
                             Id = 1,
-                            CreateAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreateAt = new DateTime(2025, 9, 10, 10, 12, 29, 947, DateTimeKind.Utc).AddTicks(8196),
                             Email = "vino_kurov@inbox.ru",
                             PasswordHash = "$V1$10000$U/97Rw6aiXmQ9AIauy8VbrbgZckvhwA6jKHDqm9naxQouwTH",
                             SoftDeleted = false,

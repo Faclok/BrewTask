@@ -4,10 +4,12 @@ services:
   backend:
     image: ${DOCKER_REGISTRY-}brewtaskapi
     environment:
-      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       CONNECTION_DB: ${CONNECTION_DB}
+      INSTALL_MIGRATION: ${INSTALL_MIGRATION}
     ports:
       - "5000:8081"
+      - "5001:8080"
     build:
       context: ./BrewTaskApiCore
       dockerfile: ./BrewTaskApi/Dockerfile

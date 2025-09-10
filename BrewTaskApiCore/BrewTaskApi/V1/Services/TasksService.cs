@@ -118,7 +118,7 @@ namespace BrewTaskApi.V1.Services
             if (request.AssigneeId != null && await context.Users.AnyAsync(a => a.Id == request.AssigneeId))
                 return null;
 
-            if (await context.Users.AnyAsync(a => a.Id == userId))
+            if (!await context.Users.AnyAsync(a => a.Id == userId))
                 return null;
 
             var createOperation = await context

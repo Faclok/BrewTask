@@ -1,15 +1,17 @@
 ﻿using BrewTaskApi.Database.Contexts;
 using BrewTaskApi.Database.Entities;
 using BrewTaskApi.Database.Services;
+using BrewTaskApi.V1.Services.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace BrewTaskApi.V1.Services
 {
-    
+
     /// <summary>
     /// subtasks
     /// </summary>
     /// <param name="context"></param>
+    [BusinessService]
     public class SubtasksService(BrewTaskContext context): SoftDeletedService<Subtasks>(context)
     {
 

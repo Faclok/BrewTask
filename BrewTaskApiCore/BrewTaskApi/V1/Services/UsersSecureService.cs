@@ -1,4 +1,5 @@
 ﻿using BrewTaskApi.Database.Services;
+using BrewTaskApi.V1.Services.Extensions;
 
 namespace BrewTaskApi.V1.Services
 {
@@ -6,6 +7,7 @@ namespace BrewTaskApi.V1.Services
     /// <summary>
     /// user login
     /// </summary>
+    [BusinessService]
     public class UsersSecureService(UsersService users, SecurePasswordService secure, JwtService jwtService)
     {
 
