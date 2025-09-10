@@ -55,12 +55,12 @@ namespace BrewTaskApi.Database.Entities
         /// <summary>
         /// create at
         /// </summary>
-        public DateTime CreateAt { get; private set; }
+        public DateTime CreateAt { get; private set; } = DateTime.UtcNow;
 
         /// <summary>
         /// update at
         /// </summary>
-        public DateTime UpdateAt { get; set; }
+        public DateTime UpdateAt { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// tasks relation

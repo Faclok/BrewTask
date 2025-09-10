@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using BrewTaskApi.V1.Services.Extensions;
+using System.Security.Cryptography;
 
 namespace BrewTaskApi.Database.Services
 {
@@ -6,6 +7,7 @@ namespace BrewTaskApi.Database.Services
     /// <summary>
     /// Сервис для работы с паролями
     /// </summary>
+    [BusinessService]
     public class SecurePasswordService
     {
 
@@ -25,7 +27,7 @@ namespace BrewTaskApi.Database.Services
         /// <param name="password">The password.</param>
         /// <param name="iterations">Number of iterations.</param>
         /// <returns>The hash.</returns>
-        public static string Hash(string password, int iterations)
+        public string Hash(string password, int iterations)
         {
             // Create salt
             byte[] salt = RandomNumberGenerator.GetBytes(SaltSize);//.GetBytes(salt = new byte[SaltSize]);
@@ -51,7 +53,7 @@ namespace BrewTaskApi.Database.Services
         /// </summary>
         /// <param name="password">The password.</param>
         /// <returns>The hash.</returns>
-        public static string Hash(string password)
+        public string Hash(string password)
         {
             return Hash(password, 10000);
         }
@@ -61,7 +63,7 @@ namespace BrewTaskApi.Database.Services
         /// </summary>
         /// <param name="hashString">The hash.</param>
         /// <returns>Is supported?</returns>
-        public static bool IsHashSupported(string hashString)
+        public bool IsHashSupported(string hashString)
         {
             return hashString.Contains("$V1$");
         }
@@ -72,7 +74,7 @@ namespace BrewTaskApi.Database.Services
         /// <param name="password">The password.</param>
         /// <param name="hashedPassword">The hash.</param>
         /// <returns>Could be verified?</returns>
-        public static bool Verify(string password, string hashedPassword)
+        public bool Verify(string password, string hashedPassword)
         {
             // Check hash
             if (!IsHashSupported(hashedPassword))

@@ -18,6 +18,26 @@ namespace BrewTaskApi.Database.Contexts
 
         #region Tables
 
+        /// <summary>
+        /// users
+        /// </summary>
+        public DbSet<User> Users { get; set; }
+
+        /// <summary>
+        /// tasks
+        /// </summary>
+        public DbSet<TaskEntity> Tasks { get; set; }
+
+        /// <summary>
+        /// sub tasks
+        /// </summary>
+        public DbSet<Subtasks> Subtasks { get; set; }
+
+        /// <summary>
+        /// task relation
+        /// </summary>
+        public DbSet<TaskRelation> TaskRelations { get; set; }
+
         #endregion
 
         #region Configuration

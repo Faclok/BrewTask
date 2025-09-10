@@ -3,7 +3,7 @@ using BrewTaskApi.Database.Contexts;
 using BrewTaskApi.Database.Extensions;
 using BrewTaskApi.JWT;
 using BrewTaskApi.Swagger;
-using BrewTaskApi.V1.Services;
+using BrewTaskApi.V1.Services.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
@@ -41,8 +41,8 @@ namespace BrewTaskApi
                 options.SubstituteApiVersionInUrl = true;
             });
 
-            // services
-            builder.Services.AddTransient<JwtService>();
+            // Add Business Services
+            builder.Services.AddBusinessServicesV1();
 
             var app = builder.Build();
 
