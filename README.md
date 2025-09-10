@@ -65,7 +65,15 @@ docker-compose up -d
 
 Приложение будет доступно по адресу: `http://localhost:5000`  
 Swagger (API документация): `http://localhost:5000/swagger`  
-PgAdmin (для управления БД): `http://localhost:5050` (логин: `admin@brew.com`, пароль: `admin`)
+
+---
+### Root пользователь для BrewTask<br>
+email: `vino_kurov@inbox.ru`<br>
+password: `vino_kurov@inbox.ru`
+
+---
+
+> ВНИМАНИЕ! Файл .env был специально залит на репозитой для примера всех переменных
 
 ### 4. Запуск вручную (для разработки)
 
