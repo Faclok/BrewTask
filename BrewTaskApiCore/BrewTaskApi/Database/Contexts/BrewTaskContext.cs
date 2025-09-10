@@ -13,7 +13,7 @@ namespace BrewTaskApi.Database.Contexts
     /// main context
     /// </summary>
     /// <param name="options"></param>
-    public class BrewTaskContext(DbContextOptions<BrewTaskContext> options) : DbContext(options)
+    public class BrewTaskContext(DbContextOptions<BrewTaskContext> options, SecurePasswordService securePassword) : DbContext(options)
     {
 
         #region Tables
@@ -99,7 +99,7 @@ namespace BrewTaskApi.Database.Contexts
                         Id = 1,
                         Username = "vinokurov",
                         Email = "vino_kurov@inbox.ru",
-                        PasswordHash = SecurePasswordService.Hash("vino_kurov@inbox.ru"),
+                        PasswordHash = securePassword.Hash("vino_kurov@inbox.ru"),
                     }
                     ]);
         }

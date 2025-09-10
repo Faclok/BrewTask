@@ -79,6 +79,26 @@ namespace BrewTaskApi.V1.Controllers
             return NotFound();
         }
 
+
+        /// <summary>
+        /// update
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <param name="service"></param>
+        /// <returns></returns>
+        [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> Update(int id, int status, [FromServices] TasksService service)
+        {
+            if (await service.UpdateStatusAsync(id, status))
+                return NoContent();
+
+            return BadRequest();
+        }
+
+
         /// <summary>
         /// create
         /// </summary>
@@ -118,5 +138,68 @@ namespace BrewTaskApi.V1.Controllers
 
             return NotFound();
         }
+
+        #region subtasks
+
+        /// <summary>
+        /// get subtasks
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="service"></param>
+        /// <returns></returns>
+        [HttpGet("{id}/subtasks")]
+        [ProducesResponseType<SubtasksService.SubtaskResponse[]>(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetSubtasks(int id, [FromServices] SubtasksService service)
+            => Ok(await service.GetOnTaskAsync(id));
+
+        /// <summary>
+        /// create subtasks
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="service"></param>
+        /// <returns></returns>
+        [HttpPost("{id}/subtasks")]
+        [ProducesResponseType<SubtasksService.SubtaskResponse[]>(StatusCodes.Status200OK)]
+        public async Task<IActionResult> CreateSubtasks(int id, [FromBody] SubtasksService.SubtaskCreateRequest request, [FromServices] SubtasksService service)
+        {
+            if (await service.CreateAsync(id, request) is not { } subtask)
+                return NotFound();
+
+            return Ok(subtask);
+        }
+
+        #endregion
+
+        #region relation
+
+        /// <summary>
+        /// get relations
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="service"></param>
+        /// <returns></returns>
+        [HttpGet("{id}/relations")]
+        [ProducesResponseType<TaskRelationService.TaskRelationResponse[]>(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetRelation(int id, [FromServices] TaskRelationService service)
+            => Ok(await service.GetRelationsAsync(id));
+
+        /// <summary>
+        /// create relations
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="service"></param>
+        /// <returns></returns>
+        [HttpPost("{id}/relations")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType<TaskRelationService.TaskRelationResponse>(StatusCodes.Status200OK)]
+        public async Task<IActionResult> CreateRelation(int id, [FromBody] TaskRelationService.TaskRelationCreateRequest request, [FromServices] TaskRelationService service)
+        {
+            if (await service.CreateAsync(id, request) is not { } relation)
+                return BadRequest();
+
+            return Ok(relation);
+        }
+
+        #endregion
     }
 }

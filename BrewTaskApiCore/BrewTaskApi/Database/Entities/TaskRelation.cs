@@ -41,6 +41,6 @@ namespace BrewTaskApi.Database.Entities
         /// <summary>
         /// create at
         /// </summary>
-        public DateTime CreateAt { get; private set; }
+        public DateTime CreateAt { get; private set; } = DateTime.UtcNow;
     }
 }

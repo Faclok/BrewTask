@@ -1,3 +1,4 @@
+using BrewTaskApi.Database.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
@@ -7,7 +8,7 @@ namespace BrewTaskApi.Database.Contexts
     /// <summary>
     /// factory command
     /// </summary>
-    public class BrewTaskContextFactory : IDesignTimeDbContextFactory<BrewTaskContext>
+    public class BrewTaskContextFactory(SecurePasswordService securePassword) : IDesignTimeDbContextFactory<BrewTaskContext>
     {
 
         /// <summary>
@@ -24,7 +25,7 @@ namespace BrewTaskApi.Database.Contexts
 
             optionsBuilder.UseNpgsql(connectionString);
 
-            return new BrewTaskContext(optionsBuilder.Options);
+            return new BrewTaskContext(optionsBuilder.Options, securePassword);
         }
     }
 }

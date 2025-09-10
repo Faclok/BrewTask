@@ -14,7 +14,7 @@ namespace BrewTaskApi.V1.Services
     /// </summary>
     /// <param name="context"></param>
     [BusinessService]
-    public class TasksService(BrewTaskContext context): SoftDeletedService<TaskEntity>(context)
+    public class TasksService(BrewTaskContext context) : SoftDeletedService<TaskEntity>(context)
     {
 
         /// <summary>
@@ -28,11 +28,11 @@ namespace BrewTaskApi.V1.Services
             .AsNoTracking()
             .Where(w => w.Id == id)
             .Select(s => new TaskResponse(
-                s.Id, 
-                s.Title, 
+                s.Id,
+                s.Title,
                 s.Description,
-                (int) s.Status,
-                (int) s.Priority,
+                (int)s.Status,
+                (int)s.Priority,
                 s.AuthorId,
                 s.AssigneeId,
                 s.CreateAt,
@@ -73,10 +73,38 @@ namespace BrewTaskApi.V1.Services
             .ExecuteUpdateAsync(s =>
                 s.SetProperty(p => p.Title, request.Title)
                 .SetProperty(p => p.Description, request.Description)
-                .SetProperty(p => p.Status, (StatusTask)request.Status)
                 .SetProperty(p => p.Priority, (PriorityTask)request.Priority)
                 .SetProperty(p => p.AssigneeId, request.AssigneeId)
                 .SetProperty(p => p.UpdateAt, DateTime.UtcNow)) > 0;
+        }
+
+
+        /// <summary>
+        /// update task status
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public async Task<bool> UpdateStatusAsync(int id, int status)
+        {
+            var requestStatus = (StatusTask)status;
+
+            if (requestStatus == StatusTask.Done)
+            {
+                if (await context.TaskRelations
+                    .Where(w => w.TaskFromId == id)
+                    .Where(w => w.RelationType == RelationTypeTask.Blocks)
+                    .Select(s => s.TaskTo)
+                    .Where(w => w != null && w.Status != StatusTask.Done)
+                    .AnyAsync())
+                    return false;
+            }
+
+            return await context
+                .Tasks
+                .Where(w => w.Id == id)
+                .ExecuteUpdateAsync(s => 
+                s.SetProperty(p => p.Status, requestStatus)) > 0;
         }
 
         /// <summary>
@@ -100,15 +128,15 @@ namespace BrewTaskApi.V1.Services
                     AssigneeId = request.AssigneeId,
                     AuthorId = userId,
                     Description = request.Description,
-                    Priority = (PriorityTask) request.Priority,
-                    Status = (StatusTask) request.Status,
+                    Priority = (PriorityTask)request.Priority,
+                    Status = (StatusTask)request.Status,
                     Title = request.Title
                 });
 
             await context.SaveChangesAsync();
 
             var entity = createOperation.Entity;
-            return new(entity.Id, entity.Title, entity.Description, 
+            return new(entity.Id, entity.Title, entity.Description,
                 request.Status, request.Priority, entity.AuthorId, entity.AssigneeId,
                 entity.CreateAt, entity.UpdateAt, 0, 0, 0); // zero is now create entity
         }
@@ -142,7 +170,7 @@ namespace BrewTaskApi.V1.Services
         /// task update
         /// </summary>
         public record TaskUpdateRequest(string Title, string Description,
-            int Status, int Priority, int? AssigneeId);
+            int Priority, int? AssigneeId);
 
         /// <summary>
         /// task create
@@ -153,8 +181,8 @@ namespace BrewTaskApi.V1.Services
         /// <summary>
         /// task response
         /// </summary>
-        public record TaskResponse(int Id, string Title, string Description, 
-            int Status, int Priority, int? AuthorId, int? AssigneeId, 
+        public record TaskResponse(int Id, string Title, string Description,
+            int Status, int Priority, int? AuthorId, int? AssigneeId,
             DateTime CreateAt, DateTime UpdateAt, int RelationTasksToCount,
             int RelationTasksFromCount, int SubtasksCount);
     }
